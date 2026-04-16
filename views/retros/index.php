@@ -8,7 +8,7 @@ $sprint_id = $_GET['sprint_id'];
 $result = $retroModel->getBySprint($sprint_id);
 $prevActions = $retroModel->getPreviousActions($sprint_id);
 
-/* separar categorías */
+/* SEPARAMOS CATEGORÍAS UWU */
 $logros = [];
 $impedimentos = [];
 $acciones = [];
@@ -32,7 +32,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 <a href="index.php">← Volver</a>
 
-<!-- FORM -->
+<!-- AQUÍ EL FORM-->
 <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
     <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
 
@@ -49,7 +49,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 <hr>
 
-<!-- ACCIONES ANTERIORES -->
+<!-- ACCIONES ANTERIORES UNU -->
 <h3>🔁 Acciones del Sprint Anterior</h3>
 <ul>
     <?php while ($row = $prevActions->fetch(PDO::FETCH_ASSOC)): ?>
@@ -66,7 +66,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         <li>
             <?= $item['descripcion'] ?>
 
-            <!-- EDITAR -->
             <form method="GET" action="/taller_base_datos_monolitico/public/index.php" style="display:inline;">
                 <input type="hidden" name="page" value="edit-retro">
                 <input type="hidden" name="id" value="<?= $item['id'] ?>">
@@ -74,7 +73,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 <button>✏</button>
             </form>
 
-            <!-- ELIMINAR -->
             <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php" style="display:inline;">
                 <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
                 <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
@@ -92,7 +90,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         <li>
             <?= $item['descripcion'] ?>
 
-            <!-- EDITAR -->
             <form method="GET" action="/taller_base_datos_monolitico/public/index.php" style="display:inline;">
                 <input type="hidden" name="page" value="edit-retro">
                 <input type="hidden" name="id" value="<?= $item['id'] ?>">
@@ -100,7 +97,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 <button>✏</button>
             </form>
 
-            <!-- ELIMINAR -->
             <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php" style="display:inline;">
                 <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
                 <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
@@ -123,7 +119,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             <?php else: ?>
                 ❌ Pendiente
 
-                <!-- MARCAR COMO CUMPLIDA -->
                 <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php" style="display:inline;">
                     <input type="hidden" name="cumplir_id" value="<?= $item['id'] ?>">
                     <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
@@ -131,7 +126,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 </form>
             <?php endif; ?>
 
-            <!-- EDITAR -->
             <form method="GET" action="/taller_base_datos_monolitico/public/index.php" style="display:inline;">
                 <input type="hidden" name="page" value="edit-retro">
                 <input type="hidden" name="id" value="<?= $item['id'] ?>">
@@ -139,7 +133,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 <button>✏</button>
             </form>
 
-            <!-- ELIMINAR -->
             <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php" style="display:inline;">
                 <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
                 <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
