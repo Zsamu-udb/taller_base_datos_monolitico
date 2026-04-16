@@ -1,19 +1,26 @@
 <?php
-class Database {
-    private $host_db = "localhost";
-    private $user_db = "root";
-    private $pwd_db = "BASES202610";
-    private $name_db = "registro_retro_db";
-    public function connect() {
-        $connDb = new mysqli(
-            $this->host_db,
-            $this->user_db,
-            $this->pwd_db,
-            $this->name_db
-        );
-        if ($connDb->connect_error) {
-            die("Error de conexión: " . $connDb->connect_error);
+class Database
+{
+    private $host = "localhost";
+    private $db_name = "registro_retro_db";
+    private $username = "root";
+    private $password = "";
+    public $conn;
+
+    public function connect()
+    {
+        try {
+            $this->conn = new PDO(
+                "mysql:host={$this->host};dbname={$this->db_name};charset=utf8",
+                $this->username,
+                $this->password
+            );
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
         }
-        return $connDb;
+
+        return $this->conn;
     }
 }
+
