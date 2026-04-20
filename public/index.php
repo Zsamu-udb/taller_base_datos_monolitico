@@ -13,11 +13,13 @@ $page = $_GET['page'] ?? null;
 
 if ($page === 'retros') {
     require '../views/retros/index.php';
+    require '../views/layout/footer.php';
     exit();
 }
 
 if ($page === 'edit-retro') {
     require '../views/retros/edit.php';
+    require '../views/layout/footer.php';
     exit();
 }
 
@@ -38,4 +40,4 @@ $result = $sprintModel->getAll();
         </li>
     <?php endwhile; ?>
 </ul>
-
+<?php require '../views/layout/footer.php'; ?>
