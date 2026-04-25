@@ -4,24 +4,30 @@ error_reporting(E_ALL);
 
 require_once '../config/database.php';
 require_once '../models/Sprint.php';
-require '../views/layout/header.php';
+
 
 $db = (new Database())->connect();
 $sprintModel = new Sprint($db);
 
 $page = $_GET['page'] ?? null;
-
+if (!$page) {
+    header("Location: index.php?page=retros&sprint_id=1");
+    exit();
+}
 if ($page === 'retros') {
+    require '../views/layout/header.php';
     require '../views/retros/index.php';
     require '../views/layout/footer.php';
     exit();
 }
 
 if ($page === 'edit-retro') {
+    require '../views/layout/header.php';
     require '../views/retros/edit.php';
     require '../views/layout/footer.php';
     exit();
 }
+require '../views/layout/header.php';
 
 $result = $sprintModel->getAll();
 ?>
@@ -40,4 +46,5 @@ $result = $sprintModel->getAll();
         </li>
     <?php endwhile; ?>
 </ul>
+
 <?php require '../views/layout/footer.php'; ?>

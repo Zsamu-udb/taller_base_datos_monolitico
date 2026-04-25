@@ -1,140 +1,148 @@
-
 <?php
+
 require_once '../models/RetroItem.php';
 
 $retroModel = new RetroItem($db);
 
-$sprint_id = $_GET['sprint_id'];
-
-$result = $retroModel->getBySprint($sprint_id);
-$prevActions = $retroModel->getPreviousActions($sprint_id);
-
-
-$logros = [];
-$impedimentos = [];
-$acciones = [];
-
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-    switch ($row['categoria']) {
-        case 'logro':
-            $logros[] = $row;
-            break;
-        case 'impedimento':
-            $impedimentos[] = $row;
-            break;
-        case 'accion':
-            $acciones[] = $row;
-            break;
-    }
+$sprint_id = $_GET['sprint_id'] ?? null;
+if (!$sprint_id) {
+    echo "<p>Sprint no válido.</p>";
+    return;
+}
+$prevActions = null;
+if ($sprint_id > 1) {
+    $prevActions = $retroModel->getPreviousActions($sprint_id);
 }
 ?>
-<h2 class="section-title">Retrospectiva del Sprint</h2>
-<a class="btn-secondary" href="index.php">← Volver</a>
-<div class="card">
-    <h3>Nuevo Aporte</h3>
-    <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
-        <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-        <div class="form-group">
-            <label>Categoría</label>
-            <select name="categoria" required>
-                <option value="logro">Logro</option>
-                <option value="impedimento">Impedimento</option>
-                <option value="accion">Acción</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Descripción</label>
-            <textarea name="descripcion" placeholder="Escribe aquí..." required></textarea>
-        </div>
-        <button class="btn-primary" type="submit">Guardar</button>
-    </form>
-</div>
-<div class="card">
-    <h3> Acciones del Sprint Anterior</h3>
-    <ul class="simple-list">
-        <?php while ($row = $prevActions->fetch(PDO::FETCH_ASSOC)): ?>
-            <li><?= $row['descripcion'] ?></li>
-        <?php endwhile; ?>
-    </ul>
-</div>
-<div class="categories-grid">
-    <div class="card">
-        <h3>✔ Logros</h3>
-        <ul class="item-list">
-            <?php foreach ($logros as $item): ?>
-                <li class="retro-item">
-                    <span><?= $item['descripcion'] ?></span>
-                    <div class="item-actions">
-                        <form method="GET" action="/taller_base_datos_monolitico/public/index.php">
-                            <input type="hidden" name="page" value="edit-retro">
-                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                            <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                            <button type="submit"></button>
-                        </form>
-                        <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
-                            <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
-                            <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                            <button type="submit">🗑</button>
-                        </form>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-    <div class="card">
-        <h3>⚠ Impedimentos</h3>
-        <ul class="item-list">
-            <?php foreach ($impedimentos as $item): ?>
-                <li class="retro-item">
-                    <span><?= $item['descripcion'] ?></span>
-                    <div class="item-actions">
-                        <form method="GET" action="/taller_base_datos_monolitico/public/index.php">
-                            <input type="hidden" name="page" value="edit-retro">
-                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                            <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                            <button type="submit">✏</button>
-                        </form>
-                        <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
-                            <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
-                            <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                            <button type="submit">🗑</button>
-                        </form>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-    <div class="card">
-        <h3> Acciones</h3>
-        <ul class="item-list">
-            <?php foreach ($acciones as $item): ?>
-                <li class="retro-item">
-                    <span><?= $item['descripcion'] ?></span>
-                    <div class="item-actions">
-                        <?php if ($item['cumplida']): ?>
-                            <span class="status-ok">✔ Cumplida</span>
-                        <?php else: ?>
-                            <span class="status-pending"> Pendiente</span>
-                            <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
-                                <input type="hidden" name="cumplir_id" value="<?= $item['id'] ?>">
-                                <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                                <button type="submit">✔</button>
-                            </form>
-                        <?php endif; ?>
-                        <form method="GET" action="/taller_base_datos_monolitico/public/index.php">
-                            <input type="hidden" name="page" value="edit-retro">
-                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                            <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                            <button type="submit">✏</button>
-                        </form>
-                        <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
-                            <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
-                            <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
-                            <button type="submit">🗑</button>
-                        </form>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-</div>
+<h2>SPRINT <?= $sprint_id ?></h2>
+<hr>
+<?php if ($sprint_id > 1 && $prevActions): ?>
+<h3>Compromisos del sprint anterior</h3>
+<ul>
+<?php while ($row = $prevActions->fetch(PDO::FETCH_ASSOC)): ?>
+    <li>
+        <?= htmlspecialchars($row['descripcion']) ?>
+        <?php if ($row['cumplida'] === null): ?>
+            <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
+                <input type="hidden" name="cumplir_id" value="<?= $row['id'] ?>">
+                <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
+                <button>✔</button>
+            </form>
+            <form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
+                <input type="hidden" name="no_cumplir_id" value="<?= $row['id'] ?>">
+                <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
+                <button>✖</button>
+            </form>
+        <?php elseif ($row['cumplida'] == 1): ?>
+            ✔ Cumplida
+        <?php else: ?>
+            ✖ No cumplida
+        <?php endif; ?>
+    </li>
+<?php endwhile; ?>
+</ul>
+<hr>
+<?php endif; ?>
+<h3>Registrar nuevo aporte</h3>
+<form method="POST" action="/taller_base_datos_monolitico/controllers/RetroController.php">
+    <input type="hidden" name="sprint_id" value="<?= $sprint_id ?>">
+    <textarea name="descripcion" placeholder="Ingrese su nuevo aporte..." required></textarea>
+    <br><br>
+    <label>Tipo de aporte</label>
+    <select name="categoria" required>
+        <option value="">Tipo de aporte</option>
+        <option value="logro">Logro</option>
+        <option value="impedimento">Impedimento</option>
+        <option value="accion">Acción</option>
+        <option value="comentario">Comentario</option>
+        <option value="otro">Otro</option>
+    </select>
+    <br><br>
+    <label>Fecha ingreso del aporte</label>
+    <input type="date" name="fecha_ingreso_nuevo_aporte" required>
+    <br><br>
+    <button type="submit">Guardar aporte</button>
+</form>
+<br>
+<?php if (!isset($_GET['ver'])): ?>
+    <a href="?page=retros&sprint_id=<?= $sprint_id ?>&ver=1">
+        Ver todos los aportes
+    </a>
+<?php else: ?>
+    <a href="?page=retros&sprint_id=<?= $sprint_id ?>">
+        Ocultar aportes
+    </a>
+<?php endif; ?>
+<br><br>
+<?php
+if (isset($_GET['ver'])) {
+    $result = $retroModel->getBySprint($sprint_id);
+    $logros = [];
+    $impedimentos = [];
+    $acciones = [];
+    $comentarios = [];
+    $otros = [];
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        switch ($row['categoria']) {
+            case 'logro': $logros[] = $row; break;
+            case 'impedimento': $impedimentos[] = $row; break;
+            case 'accion': $acciones[] = $row; break;
+            case 'comentario': $comentarios[] = $row; break;
+            case 'otro': $otros[] = $row; break;
+        }
+    }
+?>
+<hr>
+<h3>Aportes del Sprint</h3>
+<h4>Logros</h4>
+<ul>
+<?php foreach ($logros as $item): ?>
+    <li>
+        <?= htmlspecialchars($item['descripcion']) ?>
+
+        <a href="?page=edit-retro&id=<?= $item['id'] ?>&sprint_id=<?= $sprint_id ?>">Editar</a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<h4>Impedimentos</h4>
+<ul>
+<?php foreach ($impedimentos as $item): ?>
+    <li>
+        <?= htmlspecialchars($item['descripcion']) ?>
+        <a href="?page=edit-retro&id=<?= $item['id'] ?>&sprint_id=<?= $sprint_id ?>">Editar</a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<h4>Acciones</h4>
+<ul>
+<?php foreach ($acciones as $item): ?>
+    <li>
+        <?= htmlspecialchars($item['descripcion']) ?>
+        <?php if (!empty($item['cumplida'])): ?>
+            ✔
+        <?php else: ?>
+            ❌
+        <?php endif; ?>
+        <a href="?page=edit-retro&id=<?= $item['id'] ?>&sprint_id=<?= $sprint_id ?>">Editar</a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<h4>Comentarios</h4>
+<ul>
+<?php foreach ($comentarios as $item): ?>
+    <li>
+        <?= htmlspecialchars($item['descripcion']) ?>
+        <a href="?page=edit-retro&id=<?= $item['id'] ?>&sprint_id=<?= $sprint_id ?>">Editar</a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<h4>Otros</h4>
+<ul>
+<?php foreach ($otros as $item): ?>
+    <li>
+        <?= htmlspecialchars($item['descripcion']) ?>
+        <a href="?page=edit-retro&id=<?= $item['id'] ?>&sprint_id=<?= $sprint_id ?>">Editar</a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<?php } ?>
