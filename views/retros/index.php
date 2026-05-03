@@ -6,7 +6,7 @@ $retroModel = new RetroItem($db);
 
 $sprint_id = $_GET['sprint_id'] ?? null;
 if (!$sprint_id) {
-    echo "<p>Sprint no válido.</p>";
+    echo "<p>Sprint no válido.!!!</p>";
     return;
 }
 $prevActions = null;
@@ -62,15 +62,23 @@ if ($sprint_id > 1) {
     <input type="date" name="fecha_ingreso_nuevo_aporte" required>
     <br><br>
     <button type="submit">Guardar aporte</button>
+    <br><br>
+    
 </form>
 <br>
 <?php if (!isset($_GET['ver'])): ?>
     <a href="?page=retros&sprint_id=<?= $sprint_id ?>&ver=1">
-        Ver todos los aportes
+        <button type="button" > Ver todos los aportes </button>
+        <br> <br>
+        
+        <a href="<?= dirname($_SERVER['PHP_SELF']) ?>/index.php">
+             <button type="button">Volver</button>
+        </a>
+        
     </a>
 <?php else: ?>
     <a href="?page=retros&sprint_id=<?= $sprint_id ?>">
-        Ocultar aportes
+        <button type="button" > Ocultar aportes </button>
     </a>
 <?php endif; ?>
 <br><br>
@@ -145,4 +153,7 @@ if (isset($_GET['ver'])) {
     </li>
 <?php endforeach; ?>
 </ul>
+    <a href="<?= dirname($_SERVER['PHP_SELF']) ?>/index.php">
+     <button type="button">Volver</button>
+     </a>
 <?php } ?>

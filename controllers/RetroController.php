@@ -9,8 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // CREAR
     if (isset($_POST['descripcion']) && !isset($_POST['edit_id'])) {
-        $sprint_id = $_POST['sprint_id'];
-        $retro->create($sprint_id, $_POST['categoria'], $_POST['descripcion']);
+        $sprint_id = $retro->create($sprint_id, $_POST['categoria'], $_POST['descripcion']);
     }
 
     // EDITAR
