@@ -6,39 +6,45 @@ error_reporting(E_ALL);
 require_once '../config/database.php';
 require_once '../models/Sprint.php';
 
-$db = (new Database())->connect();
-
-require '../views/layout/header.php';
+$database = new Database();
+$db = $database->connect();
 
 $sprintModel = new Sprint($db);
 
-$page = $_GET['page'] ?? null;
+require '../views/layout/header.php';
 
-/* RETROSPECTIVA */
+$page = $_GET['page'] ?? 'home';
+
+/* RETROSPECTIVAS :p*/
 if ($page === 'retros') {
+
     require '../views/retros/index.php';
     require '../views/layout/footer.php';
+
     exit();
 }
 
-/* EDITAR ITEM */
+/* EDITAR RETRO :P*/
 if ($page === 'edit-retro') {
+
     require '../views/retros/edit.php';
     require '../views/layout/footer.php';
+
     exit();
 }
 
-/* LISTAR SPRINTS */
+/* OBTENER SPRINTS :p*/
 $result = $sprintModel->getAll();
 
 ?>
 
 <h1>Lista de Sprints</h1>
 
-<!-- FORM CREAR SPRINT -->
+<!-- AQUÍ CREAMOS EL SPRINT -->
 <h3>Crear Sprint</h3>
 
-<form method="POST" action="/taller_base_datos_monolitico/controllers/SprintController.php">
+<form method="POST"
+      action="/taller_base_datos_monolitico/controllers/SprintController.php">
 
     <input
         type="text"
@@ -73,7 +79,9 @@ $result = $sprintModel->getAll();
 
     <li>
 
-        <strong><?= $row['nombre'] ?></strong>
+        <strong>
+            <?= $row['nombre'] ?>
+        </strong>
 
         (<?= $row['fecha_inicio'] ?> - <?= $row['fecha_fin'] ?>)
 
