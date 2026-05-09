@@ -1,8 +1,15 @@
 <?php
+
+if (!isset($db)) {
+    require_once '../config/database.php';
+
+    $database = new Database();
+    $db = $database->connect();
+}
+
 require_once '../models/RetroItem.php';
 
 $retroModel = new RetroItem($db);
-
 $sprint_id = $_GET['sprint_id'];
 
 $result = $retroModel->getBySprint($sprint_id);
