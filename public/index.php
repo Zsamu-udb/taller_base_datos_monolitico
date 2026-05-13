@@ -38,7 +38,7 @@ $result = $sprintModel->getAll();
 
 ?>
 
-<h1>Lista de Sprints</h1>
+<h2>Lista de Sprints</h2>
 
 <!-- AQUÍ CREAMOS EL SPRINT -->
 <h3>Crear Sprint</h3>
@@ -87,7 +87,20 @@ $result = $sprintModel->getAll();
 
         <a href="?page=retros&sprint_id=<?= $row['id'] ?>">
             Ver retrospectiva
+         </a>
+
+        <!-- ELIMINAR -->
+        <a href="../controllers/SprintController.php?action=eliminar&id=<?php echo $sprint['id']; ?>" 
+        onclick="return confirm('¿Seguro que quieres eliminar este sprint?')" 
+        class="btn-eliminar">
+        Eliminar
         </a>
+            <input
+                type="hidden"
+                name="delete_id"
+                value="<?= $sprint['id'] ?>"
+            >
+
 
     </li>
 

@@ -50,4 +50,11 @@ class Sprint {
 
         return $stmt->execute();
     }
+
+   public function delete($id) {
+    $query = "DELETE FROM sprints WHERE id = :id";
+    $stmt = $this->db->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    return $stmt->execute();
+}
 }

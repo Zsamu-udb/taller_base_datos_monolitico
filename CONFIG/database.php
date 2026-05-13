@@ -6,7 +6,7 @@ class Database
     private $host = "localhost";
     private $db_name = "registro_retro_db";
     private $username = "root";
-    private $password = "";
+    private $password = "BASES202610";
 
     /* CONEXIÓN UWU*/
     private $conn;
