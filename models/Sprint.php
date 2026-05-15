@@ -1,6 +1,7 @@
 <?php
 
-class Sprint {
+class Sprint
+{
 
     /* CONEXIÓN */
     private $conn;
@@ -17,12 +18,14 @@ class Sprint {
     public $updated_at;
 
     /* CONSTRUCTOR */
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
     /* OBTENER TODOS LOS SPRINTS */
-    public function getAll() {
+    public function getAll()
+    {
 
         $query = "SELECT * FROM {$this->table}
                   ORDER BY id DESC";
@@ -35,7 +38,8 @@ class Sprint {
     }
 
     /* CREAR SPRINT */
-    public function create() {
+    public function create()
+    {
 
         $query = "INSERT INTO {$this->table}
                   (nombre, fecha_inicio, fecha_fin)
@@ -47,6 +51,17 @@ class Sprint {
         $stmt->bindParam(":nombre", $this->nombre);
         $stmt->bindParam(":fecha_inicio", $this->fecha_inicio);
         $stmt->bindParam(":fecha_fin", $this->fecha_fin);
+
+        return $stmt->execute();
+    }
+
+    public function delete(int $id): bool
+    {
+        $query = "DELETE FROM sprints WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         return $stmt->execute();
     }

@@ -79,17 +79,33 @@ $result = $sprintModel->getAll();
 
     <li>
 
-        <strong>
-            <?= $row['nombre'] ?>
-        </strong>
+    <strong><?= $row['nombre'] ?></strong>
 
-        (<?= $row['fecha_inicio'] ?> - <?= $row['fecha_fin'] ?>)
+    (<?= $row['fecha_inicio'] ?> - <?= $row['fecha_fin'] ?>)
 
-        <a href="?page=retros&sprint_id=<?= $row['id'] ?>">
-            Ver retrospectiva
-        </a>
+    <a href="?page=retros&sprint_id=<?= $row['id'] ?>">
+        Ver retrospectiva
+    </a>
 
-    </li>
+    <form
+        method="POST"
+        action="/taller_base_datos_monolitico/controllers/SprintController.php"
+        style="display:inline;"
+    >
+
+        <input
+            type="hidden"
+            name="delete_sprint_id"
+            value="<?= $row['id'] ?>"
+        >
+
+        <button type="submit">
+            🗑
+        </button>
+
+    </form>
+
+</li>
 
 <?php endwhile; ?>
 

@@ -3,26 +3,31 @@
 require_once '../config/database.php';
 require_once '../models/Sprint.php';
 
-
 $database = new Database();
 $db = $database->connect();
 
+$sprintModel = new Sprint($db);
 
-$sprint = new Sprint($db);
+/* CREAR SPRINT */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre'])) {
 
+    $sprintModel->nombre = $_POST['nombre'];
+    $sprintModel->fecha_inicio = $_POST['fecha_inicio'];
+    $sprintModel->fecha_fin = $_POST['fecha_fin'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $sprintModel->create();
 
-    /* ASIGNAR PROPIEDADES :3 */
-    $sprint->nombre = $_POST['nombre'];
-    $sprint->fecha_inicio = $_POST['fecha_inicio'];
-    $sprint->fecha_fin = $_POST['fecha_fin'];
+    header('Location: ../public/index.php');
+    exit();
+}
 
+/* ELIMINAR SPRINT */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_sprint_id'])) {
 
-    $sprint->create();
+    $id = $_POST['delete_sprint_id'];
 
+    $sprintModel->delete($id);
 
-    header("Location: /taller_base_datos_monolitico/public/index.php");
-
+    header('Location: ../public/index.php');
     exit();
 }
