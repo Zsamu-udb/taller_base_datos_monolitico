@@ -3,40 +3,30 @@
 require_once '../config/database.php';
 require_once '../models/Sprint.php';
 
-
 $database = new Database();
 $db = $database->connect();
 
-
-$sprint = new Sprint($db);
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    /* ASIGNAR PROPIEDADES :3 */
-    $sprint->nombre = $_POST['nombre'];
-    $sprint->fecha_inicio = $_POST['fecha_inicio'];
-    $sprint->fecha_fin = $_POST['fecha_fin'];
+$sprintModel = new Sprint($db);
 
 
-    $sprint->create();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre'])) {
 
+    $sprintModel->nombre = $_POST['nombre'];
+    $sprintModel->fecha_inicio = $_POST['fecha_inicio'];
+    $sprintModel->fecha_fin = $_POST['fecha_fin'];
 
-    header("Location: /taller_base_datos_monolitico/public/index.php");
+    $sprintModel->create();
 
+    header('Location: ../public/index.php');
     exit();
-
-
-if (isset($_GET['action']) && $_GET['action'] == 'eliminar') {
-    $id = $_GET['id'] ?? null;
-
-    if ($id) {
-        if ($sprintModel->delete($id)) {
-            header("Location: ../public/index.php");
-            exit();
-        } else {
-            echo "Error al eliminar de la base de datos";
-        }
-    }
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_sprint_id'])) {
+
+    $id = $_POST['delete_sprint_id'];
+
+    $sprintModel->delete($id);
+
+    header('Location: ../public/index.php');
+    exit();
 }

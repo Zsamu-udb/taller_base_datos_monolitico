@@ -15,7 +15,6 @@ require '../views/layout/header.php';
 
 $page = $_GET['page'] ?? 'home';
 
-/* RETROSPECTIVAS :p*/
 if ($page === 'retros') {
 
     require '../views/retros/index.php';
@@ -24,7 +23,6 @@ if ($page === 'retros') {
     exit();
 }
 
-/* EDITAR RETRO :P*/
 if ($page === 'edit-retro') {
 
     require '../views/retros/edit.php';
@@ -33,11 +31,19 @@ if ($page === 'edit-retro') {
     exit();
 }
 
-/* OBTENER SPRINTS :p*/
 $result = $sprintModel->getAll();
 
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+    
 <h2>Lista de Sprints</h2>
 
 <!-- AQUÍ CREAMOS EL SPRINT -->
@@ -78,30 +84,31 @@ $result = $sprintModel->getAll();
 <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)): ?>
 
     <li>
+            <strong><?= $row['nombre'] ?></strong>
 
-        <strong>
-            <?= $row['nombre'] ?>
-        </strong>
+    (<?= $row['fecha_inicio'] ?> - <?= $row['fecha_fin'] ?>)
 
-        (<?= $row['fecha_inicio'] ?> - <?= $row['fecha_fin'] ?>)
+    <a href="?page=retros&sprint_id=<?= $row['id'] ?>">
+        Ver retrospectiva
+    </a>
 
-        <a href="?page=retros&sprint_id=<?= $row['id'] ?>">
-            Ver retrospectiva
-         </a>
+    <form
+        method="POST"
+        action="/taller_base_datos_monolitico/controllers/SprintController.php"
+        style="display:inline;"
+    >
 
-        <!-- ELIMINAR -->
-        <a href="../controllers/SprintController.php?action=eliminar&id=<?php echo $sprint['id']; ?>" 
-        onclick="return confirm('¿Seguro que quieres eliminar este sprint?')" 
-        class="btn-eliminar">
-        Eliminar
-        </a>
-            <input
-                type="hidden"
-                name="delete_id"
-                value="<?= $sprint['id'] ?>"
-            >
+        <input
+            type="hidden"
+            name="delete_sprint_id"
+            value="<?= $row['id'] ?>"
+        >
 
+        <button type="submit">
+            Eliminar
+        </button>
 
+    </form>
     </li>
 
 <?php endwhile; ?>
@@ -109,3 +116,6 @@ $result = $sprintModel->getAll();
 </ul>
 
 <?php require '../views/layout/footer.php'; ?>
+
+</body>
+</html>

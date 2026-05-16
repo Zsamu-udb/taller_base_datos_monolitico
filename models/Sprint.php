@@ -2,13 +2,8 @@
 
 class Sprint {
 
-    /* CONEXIÓN */
     private $conn;
-
-    /* TABLA */
     private $table = "sprints";
-
-    /* PROPIEDADES */
     public $id;
     public $nombre;
     public $fecha_inicio;
@@ -34,9 +29,7 @@ class Sprint {
         return $stmt;
     }
 
-    /* CREAR SPRINT */
     public function create() {
-
         $query = "INSERT INTO {$this->table}
                   (nombre, fecha_inicio, fecha_fin)
                   VALUES
@@ -50,11 +43,10 @@ class Sprint {
 
         return $stmt->execute();
     }
-
-   public function delete($id) {
-    $query = "DELETE FROM sprints WHERE id = :id";
-    $stmt = $this->db->prepare($query);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    return $stmt->execute();
-}
+    public function delete(int $id): bool {
+        $query = "DELETE FROM sprints WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }

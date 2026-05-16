@@ -7,11 +7,8 @@ class Database
     private $db_name = "registro_retro_db";
     private $username = "root";
     private $password = "BASES202610";
-
-    /* CONEXIÓN UWU*/
     private $conn;
 
-    /* MÉTODO DE CONEXIÓN  UWU*/
     public function connect()
     {
         $this->conn = null;
