@@ -41,7 +41,15 @@ if ($page === 'edit-retro') {
 $result = $sprintModel->getAll();
 
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
 <h2>Lista de Sprints</h2>
 
 <!-- AQUI CREAMOS SPRINT uwu-->
@@ -111,3 +119,5 @@ $result = $sprintModel->getAll();
 </ul>
 
 <?php require '../views/layout/footer.php'; ?>
+</body>
+</html>
