@@ -1,58 +1,85 @@
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
+/* VARIABLES -VALK*/
+:root{
+    --bg:#0b0b12;
+    --card:#141421;
+    --card-hover:#1a1a2b;
+
+    --primary:#8b5cf6;
+    --primary-light:#a855f7;
+
+    --text:#f5f5f5;
+    --text-soft:#b8b8c7;
+
+    --border:rgba(255,255,255,0.08);
+
+    --success:#22c55e;
+    --danger:#ef4444;
+    --warning:#f59e0b;
+}
+
+/* BODY -VALK*/
 body{
-    font-family: 'Poppins', sans-serif;
+    font-family:'Poppins',sans-serif;
     background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 25%),
-    radial-gradient(circle at bottom right, rgba(168,85,247,0.15), transparent 25%),
-    #09090f;
-    color:#f5f5f5;
+    radial-gradient(circle at top left,
+    rgba(139,92,246,0.18),
+    transparent 25%),
+
+    radial-gradient(circle at bottom right,
+    rgba(168,85,247,0.12),
+    transparent 25%),
+
+    var(--bg);
+
+    color:var(--text);
+
     min-height:100vh;
+
     padding:40px;
 }
 
+/* CONTAINER -VALK*/
 .container{
-    margin-left: 250px;
-    max-width:1200px;
+    max-width:1100px;
     margin:auto;
 }
 
+/* TITULOS-VALK*/
 h1{
-    margin-left: 500px;
-    margin-bottom:10px;
-    color:rgb(255, 255, 255);
+    font-size:42px;
+    margin-bottom:25px;
     font-weight:700;
 }
 
 h2{
-    margin-top: 80px;
-    margin-bottom:10px;
-    color:rgb(255, 255, 255);
-    font-weight: 650px;;
+    font-size:34px;
+    margin-bottom:25px;
+    margin-top:20px;
 }
 
 h3{
-    margin-top: 15px;
-    font-size:20px;
-    color:rgb(255, 255, 255);
-    font-weight:700;
+    font-size:22px;
+    margin-bottom:18px;
+    margin-top:35px;
+    color:white;
 }
 
 h4{
-    margin-top:80px;
-    margin-bottom:7px;
-    color:#ffffff;
-    font-size:24px;
+    font-size:18px;
+    margin-bottom:10px;
+    color:var(--text-soft);
 }
 
+/* LINKS-VALK*/
 a{
+    color:var(--primary-light);
     text-decoration:none;
-    color:#a142ff;
     font-weight:600;
     transition:0.3s;
 }
@@ -61,42 +88,65 @@ a:hover{
     color:white;
 }
 
-.main-form{
-    background: rgba(255, 255, 255, 0.04);
-    border:1px solid rgba(255,255,255,0.06);
-    backdrop-filter: blur(12px);
-    padding:30px;
+/* CARDS-VALK*/
+.main-form,
+.card{
+    background:rgba(255,255,255,0.04);
+
+    border:1px solid var(--border);
+
+    backdrop-filter:blur(14px);
+
     border-radius:24px;
+
+    padding:30px;
+
     box-shadow:
     0 10px 40px rgba(0,0,0,0.45);
 }
 
-select,
+/* FORM-VALK*/
+form{
+    margin-top:20px;
+}
+
+/* INPUTS-VALK*/
+input,
 textarea,
-input{
+select{
     width:100%;
-    background:#3d1a71;
-    border:1px solid #ffffff;
-    color:#f5f5f5;
-    padding:16px;
+
+    background:#181826;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:var(--text);
+
+    padding:15px 18px;
+
     border-radius:16px;
+
     outline:none;
-    margin-top:12px;
+
+    margin-top:14px;
+
     font-size:15px;
-    transition:0.3s;
+
+    transition:0.25s;
 }
 
 input::placeholder,
 textarea::placeholder{
-    color:#ffffff;
+    color:#8d8da3;
 }
 
-select:focus,
+input:focus,
 textarea:focus,
-input:focus{
-    border:1px solid #a855f7;
+select:focus{
+    border:1px solid var(--primary);
+
     box-shadow:
-    0 0 20px rgba(168,85,247,0.3);
+    0 0 0 4px rgba(139,92,246,0.15);
 }
 
 textarea{
@@ -104,72 +154,103 @@ textarea{
     resize:none;
 }
 
+/* BOTONES-ZSAMU */
 button{
     border:none;
-    cursor:pointer;
+
     padding:13px 22px;
-    margin-top: 18px;
+
     border-radius:14px;
-    background: linear-gradient(
+
+    cursor:pointer;
+
+    margin-top:18px;
+
+    background:linear-gradient(
         135deg,
-        #7c3aed,
-        #a855f7
+        var(--primary),
+        var(--primary-light)
     );
+
     color:white;
+
     font-weight:600;
+
     transition:0.25s;
 }
 
 button:hover{
     transform:translateY(-2px);
+
     box-shadow:
-    0 8px 25px rgba(168,85,247,0.45);
+    0 10px 25px rgba(168,85,247,0.35);
 }
 
+/* LISTA-VAÑLK */
 ul{
     list-style:none;
+    margin-top:20px;
 }
 
+/* ITEM CARD-VAKL */
 li{
+    background:var(--card);
 
-    background: rgb(45, 0, 93);
-    border:1px solid rgba(72, 9, 145, 0.06);
-    padding:22px;
+    border:1px solid var(--border);
+
     border-radius:20px;
-    margin-bottom:15px;
+
+    padding:22px;
+
+    margin-bottom:16px;
+
+    transition:0.25s;
+
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:15px;
-    transition:0.3s;
+    gap:20px;
 }
 
 li:hover{
+    background:var(--card-hover);
+
     transform:translateY(-3px);
-    background: rgba(255, 255, 255, 0.05);
+
     box-shadow:
-    0 10px 30px rgba(145, 44, 253, 0.35);
+    0 10px 25px rgba(0,0,0,0.3);
 }
 
+/* ACTION BUTTONS-VALK */
 li form{
-    margin:0;
+    display:inline;
 }
 
-hr{
-    margin:40px 0;
-    border:none;
-    height:1px;
-    background: rgba(255,255,255,0.08);
+li button{
+    padding:10px 14px;
+    margin-top:0;
+    font-size:14px;
 }
 
+/* ESTADO-VALK */
 .success{
-    color:#22c55e;
-    font-weight:bold;
+    color:var(--success);
+    font-weight:700;
 }
 
 .pending{
-    color:#f87171;
-    font-weight:bold;
+    color:var(--danger);
+    font-weight:700;
+}
+
+hr{
+    border:none;
+
+    height:1px;
+
+    background:rgba(255,255,255,0.08);
+
+    margin:40px 0;
 }
 
 ::-webkit-scrollbar{
@@ -177,19 +258,24 @@ hr{
 }
 
 ::-webkit-scrollbar-thumb{
-
-    background:#3f3f46;
-
+    background:#2a2a3d;
     border-radius:20px;
 }
 
 @media(max-width:768px){
+
     body{
         padding:20px;
     }
-    h2{
-        font-size:30px;
+
+    h1{
+        font-size:32px;
     }
+
+    h2{
+        font-size:28px;
+    }
+
     li{
         flex-direction:column;
         align-items:flex-start;

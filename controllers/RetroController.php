@@ -3,32 +3,39 @@
 require_once '../config/database.php';
 require_once '../models/RetroItem.php';
 
-$db = (new Database())->connect();
+/* NUESTRA CONEXIÓN JEJEJEJEJEJEE*/
+$database = new Database();
+$db = $database->connect();
 
+/* MODELO JUAS*/
 $retro = new RetroItem($db);
+
+/* PETICIONES POST */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    /*CREAR ITEM juaas*/
 
     if (isset($_POST['descripcion']) && !isset($_POST['edit_id'])) {
 
-        $retro->sprint_id = $_POST['sprint_id'];
-        $retro->categoria = $_POST['categoria'];
-        $retro->descripcion = $_POST['descripcion'];
+        $retro->setSprintId((int) $_POST['sprint_id']);
+        $retro->setCategoria($_POST['categoria']);
+        $retro->setDescripcion($_POST['descripcion']);
 
         $retro->create();
 
         $sprint_id = $_POST['sprint_id'];
     }
 
+    /*ACTUALIZAR ITEM JEJHWERHGFRE*/
 
     if (isset($_POST['edit_id'])) {
 
-        $retro->update(
-            $_POST['edit_id'],
-            $_POST['categoria'],
-            $_POST['descripcion']
-        );
+        $retro->setId((int) $_POST['edit_id']);
+        $retro->setCategoria($_POST['categoria']);
+        $retro->setDescripcion($_POST['descripcion']);
+
+        $retro->update();
 
         $sprint_id = $_POST['sprint_id'];
     }
@@ -36,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['cumplir_id'])) {
 
-        $retro->marcarCumplida($_POST['cumplir_id']);
+        $retro->marcarCumplida((int) $_POST['cumplir_id']);
 
         $sprint_id = $_POST['sprint_id'];
     }
@@ -44,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['delete_id'])) {
 
-        $retro->delete($_POST['delete_id']);
+        $retro->delete((int) $_POST['delete_id']);
 
         $sprint_id = $_POST['sprint_id'];
     }

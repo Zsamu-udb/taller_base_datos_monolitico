@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <title>Registro de Retrospectivas</title>
 
-    <link rel="stylesheet" href="/taller_base_datos_monolitico/css/style.css">
+    <title>Registro Retrospectivas Scrum</title>
+
+    <link rel="stylesheet"
+          href="/taller_base_datos_monolitico/css/style.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 </head>
-<body>
 
-<header>
-    <h1> Registro de Retrospectivas </h1>
-</header>
+<body>
 
 <div class="container">

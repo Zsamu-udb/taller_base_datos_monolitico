@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/../../models/RetroItem.php';
 
-
 if (!isset($db)) {
 
     require_once __DIR__ . '/../../config/database.php';
@@ -11,11 +10,15 @@ if (!isset($db)) {
     $db = $database->connect();
 }
 
-
 $retroModel = new RetroItem($db);
 
-$id = $_GET['id'];
-$sprint_id = $_GET['sprint_id'];
+$id = isset($_GET['id'])
+    ? (int) $_GET['id']
+    : 0;
+
+$sprint_id = isset($_GET['sprint_id'])
+    ? (int) $_GET['sprint_id']
+    : 0;
 
 $item = $retroModel->getById($id);
 
@@ -30,34 +33,32 @@ $item = $retroModel->getById($id);
 <br><br>
 
 <form method="POST"
-      action="/taller_base_datos_monolitico/controllers/RetroController.php">
+    action="/taller_base_datos_monolitico/controllers/RetroController.php">
 
     <input
         type="hidden"
         name="edit_id"
-        value="<?= $id ?>"
-    >
+        value="<?= $id ?>">
 
     <input
         type="hidden"
         name="sprint_id"
-        value="<?= $sprint_id ?>"
-    >
+        value="<?= $sprint_id ?>">
 
     <select name="categoria" required>
 
         <option value="logro"
-            <?= $item['categoria'] == 'logro' ? 'selected' : '' ?>>
+            <?= $item['categoria'] === 'logro' ? 'selected' : '' ?>>
             Logro
         </option>
 
         <option value="impedimento"
-            <?= $item['categoria'] == 'impedimento' ? 'selected' : '' ?>>
+            <?= $item['categoria'] === 'impedimento' ? 'selected' : '' ?>>
             Impedimento
         </option>
 
         <option value="accion"
-            <?= $item['categoria'] == 'accion' ? 'selected' : '' ?>>
+            <?= $item['categoria'] === 'accion' ? 'selected' : '' ?>>
             Acción
         </option>
 
@@ -67,7 +68,7 @@ $item = $retroModel->getById($id);
 
     <textarea
         name="descripcion"
-        required><?= $item['descripcion'] ?></textarea>
+        required><?= htmlspecialchars($item['descripcion']) ?></textarea>
 
     <br><br>
 

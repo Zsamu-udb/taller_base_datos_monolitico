@@ -9,13 +9,15 @@ require_once '../models/Sprint.php';
 $database = new Database();
 $db = $database->connect();
 
+
 $sprintModel = new Sprint($db);
 
 require '../views/layout/header.php';
 
+
 $page = $_GET['page'] ?? 'home';
 
-/* RETROSPECTIVAS :p*/
+
 if ($page === 'retros') {
 
     require '../views/retros/index.php';
@@ -24,7 +26,8 @@ if ($page === 'retros') {
     exit();
 }
 
-/* EDITAR RETRO :P*/
+/* AQUÍ PA EDITAR RETRO */
+
 if ($page === 'edit-retro') {
 
     require '../views/retros/edit.php';
@@ -33,14 +36,16 @@ if ($page === 'edit-retro') {
     exit();
 }
 
-/* OBTENER SPRINTS :p*/
+/* AQUI PA OBTENER SPRINTS UWU*/
+
 $result = $sprintModel->getAll();
 
 ?>
 
 <h2>Lista de Sprints</h2>
 
-<!-- AQUÍ CREAMOS EL SPRINT -->
+<!-- AQUI CREAMOS SPRINT uwu-->
+
 <h3>Crear Sprint</h3>
 
 <form method="POST"
@@ -50,20 +55,17 @@ $result = $sprintModel->getAll();
         type="text"
         name="nombre"
         placeholder="Nombre del sprint"
-        required
-    >
+        required>
 
     <input
         type="date"
         name="fecha_inicio"
-        required
-    >
+        required>
 
     <input
         type="date"
         name="fecha_fin"
-        required
-    >
+        required>
 
     <button type="submit">
         Crear Sprint
@@ -80,27 +82,27 @@ $result = $sprintModel->getAll();
     <li>
 
         <strong>
-            <?= $row['nombre'] ?>
+            <?= htmlspecialchars($row['nombre']) ?>
         </strong>
 
-        (<?= $row['fecha_inicio'] ?> - <?= $row['fecha_fin'] ?>)
+        (
+            <?= htmlspecialchars($row['fecha_inicio']) ?>
+            -
+            <?= htmlspecialchars($row['fecha_fin']) ?>
+        )
 
+        <!-- VER RETROSPECTIVA UWU-->
         <a href="?page=retros&sprint_id=<?= $row['id'] ?>">
             Ver retrospectiva
-         </a>
-
-        <!-- ELIMINAR -->
-        <a href="../controllers/SprintController.php?action=eliminar&id=<?php echo $sprint['id']; ?>" 
-        onclick="return confirm('¿Seguro que quieres eliminar este sprint?')" 
-        class="btn-eliminar">
-        Eliminar
         </a>
-            <input
-                type="hidden"
-                name="delete_id"
-                value="<?= $sprint['id'] ?>"
-            >
 
+        <!-- AQUI PUES PA ELIMINAR SHJAGHDJAS -->
+        <a href="../controllers/SprintController.php?action=eliminar&id=<?= $row['id'] ?>"
+           onclick="return confirm('¿Seguro que quieres eliminar este sprint?')">
+
+            🗑 Eliminar
+
+        </a>
 
     </li>
 

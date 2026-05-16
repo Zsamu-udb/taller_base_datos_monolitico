@@ -1,68 +1,115 @@
 <?php
 
-class RetroItem
+require_once 'Model.php';
+
+class RetroItem extends Model
 {
+    private string $table = "retro_items";
 
-    private $conn;
+    private ?int $id = null;
+    private int $sprint_id;
+    private string $categoria;
+    private string $descripcion;
+    private ?bool $cumplida = null;
+    private ?string $fecha_revision = null;
 
-    private $table = "retro_items";
 
-    /* PROPIEDADES OO JHASSA*/
-    public $id;
-    public $sprint_id;
-    public $categoria;
-    public $descripcion;
-    public $cumplida;
-    public $fecha_revision;
-    public $created_at;
-    public $updated_at;
 
-    /* ESTE ES EL CONSTRUCTOR */
-    public function __construct($db)
+    public function setId(int $id): void
     {
-        $this->conn = $db;
+        $this->id = $id;
     }
 
-    /* CREAR ITEM :3*/
-    public function create()
+    public function setSprintId(int $sprint_id): void
     {
-
-        $query = "INSERT INTO {$this->table}
-                  (sprint_id, categoria, descripcion)
-                  VALUES
-                  (:sprint_id, :categoria, :descripcion)";
-
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(":sprint_id", $this->sprint_id);
-        $stmt->bindParam(":categoria", $this->categoria);
-        $stmt->bindParam(":descripcion", $this->descripcion);
-
-        return $stmt->execute();
+        $this->sprint_id = $sprint_id;
     }
 
-    /* OBTENER ITEMS POR SPRINT :3*/
-    public function getBySprint($sprint_id)
+    public function setCategoria(string $categoria): void
     {
+        $this->categoria = $categoria;
+    }
 
-        $query = "SELECT *
-                  FROM {$this->table}
-                  WHERE sprint_id = :sprint_id
+    public function setDescripcion(string $descripcion): void
+    {
+        $this->descripcion = $descripcion;
+    }
+
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getSprintId(): int
+    {
+        return $this->sprint_id;
+    }
+
+    public function getCategoria(): string
+    {
+        return $this->categoria;
+    }
+
+    public function getDescripcion(): string
+    {
+        return $this->descripcion;
+    }
+
+
+    public function getAll()
+    {
+        $query = "SELECT * FROM {$this->table}
                   ORDER BY id DESC";
 
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(":sprint_id", $sprint_id);
+        $stmt = $this->db->prepare($query);
 
         $stmt->execute();
 
         return $stmt;
     }
 
-    /* OBTENER ACCIONES ANTERIORES :3*/
-    public function getPreviousActions($sprint_id)
-    {
 
+
+    public function create(): bool
+    {
+        $query = "INSERT INTO {$this->table}
+                  (sprint_id, categoria, descripcion)
+                  VALUES
+                  (:sprint_id, :categoria, :descripcion)";
+
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindParam(':sprint_id', $this->sprint_id);
+        $stmt->bindParam(':categoria', $this->categoria);
+        $stmt->bindParam(':descripcion', $this->descripcion);
+
+        return $stmt->execute();
+    }
+
+
+
+    public function getBySprint(int $sprint_id)
+    {
+        $query = "SELECT *
+                  FROM {$this->table}
+                  WHERE sprint_id = :sprint_id
+                  ORDER BY id DESC";
+
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindParam(':sprint_id', $sprint_id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+
+
+    public function getPreviousActions(int $sprint_id)
+    {
         $previous = $sprint_id - 1;
 
         $query = "SELECT *
@@ -70,75 +117,74 @@ class RetroItem
                   WHERE sprint_id = :sprint_id
                   AND categoria = 'accion'";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->prepare($query);
 
-        $stmt->bindParam(":sprint_id", $previous);
+        $stmt->bindParam(':sprint_id', $previous, PDO::PARAM_INT);
 
         $stmt->execute();
 
         return $stmt;
     }
 
-    /* MARCAR COMO CUMPLIDA :3*/
-    public function marcarCumplida($id)
+
+
+    public function getById(int $id)
     {
-
-        $query = "UPDATE {$this->table}
-                  SET cumplida = 1
-                  WHERE id = :id";
-
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(":id", $id);
-
-        return $stmt->execute();
-    }
-
-    /* ELIMINAR :3*/
-    public function delete($id)
-    {
-
-        $query = "DELETE FROM {$this->table}
-                  WHERE id = :id";
-
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(":id", $id);
-
-        return $stmt->execute();
-    }
-
-    /* OBTENER POR ID :3*/
-    public function getById($id)
-    {
-
         $query = "SELECT *
                   FROM {$this->table}
                   WHERE id = :id";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->prepare($query);
 
-        $stmt->bindParam(":id", $id);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /* ACTUALIZAR :3*/
-    public function update($id, $categoria, $descripcion)
-    {
 
+
+    public function update(): bool
+    {
         $query = "UPDATE {$this->table}
                   SET categoria = :categoria,
                       descripcion = :descripcion
                   WHERE id = :id";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->prepare($query);
 
-        $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":categoria", $categoria);
-        $stmt->bindParam(":descripcion", $descripcion);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':categoria', $this->categoria);
+        $stmt->bindParam(':descripcion', $this->descripcion);
+
+        return $stmt->execute();
+    }
+
+
+
+    public function marcarCumplida(int $id): bool
+    {
+        $query = "UPDATE {$this->table}
+                  SET cumplida = 1
+                  WHERE id = :id";
+
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+
+    public function delete(int $id): bool
+    {
+        $query = "DELETE FROM {$this->table}
+                  WHERE id = :id";
+
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         return $stmt->execute();
     }
