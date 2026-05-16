@@ -6,16 +6,17 @@ class Sprint extends Model
 {
     private string $table = "sprints";
 
+    /* ATRIBUTOS */
     private ?int $id = null;
     private string $nombre;
     private string $fecha_inicio;
     private string $fecha_fin;
 
-
+    /* SETTERS */
 
     public function setNombre(string $nombre): void
     {
-        $this->nombre = $nombre;
+        $this->nombre = trim($nombre);
     }
 
     public function setFechaInicio(string $fecha_inicio): void
@@ -28,7 +29,12 @@ class Sprint extends Model
         $this->fecha_fin = $fecha_fin;
     }
 
+    /* GETTERS */
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getNombre(): string
     {
@@ -45,11 +51,12 @@ class Sprint extends Model
         return $this->fecha_fin;
     }
 
+    /* OBTENER TODOS */
 
-
-    public function getAll()
+    public function getAll(): PDOStatement
     {
-        $query = "SELECT * FROM {$this->table}
+        $query = "SELECT *
+                  FROM {$this->table}
                   ORDER BY id DESC";
 
         $stmt = $this->db->prepare($query);
@@ -59,7 +66,7 @@ class Sprint extends Model
         return $stmt;
     }
 
-
+    /* CREAR :P */
 
     public function create(): bool
     {
@@ -70,22 +77,24 @@ class Sprint extends Model
 
         $stmt = $this->db->prepare($query);
 
-        $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->bindParam(':fecha_inicio', $this->fecha_inicio);
-        $stmt->bindParam(':fecha_fin', $this->fecha_fin);
+        $stmt->bindValue(':nombre', $this->nombre);
+        $stmt->bindValue(':fecha_inicio', $this->fecha_inicio);
+        $stmt->bindValue(':fecha_fin', $this->fecha_fin);
 
         return $stmt->execute();
     }
 
+    /* ELIMINAR :p */
 
     public function delete(int $id): bool
     {
-        $query = "DELETE FROM {$this->table}
+        $query = "DELETE
+                  FROM {$this->table}
                   WHERE id = :id";
 
         $stmt = $this->db->prepare($query);
 
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         return $stmt->execute();
     }

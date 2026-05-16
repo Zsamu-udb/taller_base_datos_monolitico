@@ -8,31 +8,45 @@ $db = $database->connect();
 
 $sprint = new Sprint($db);
 
-/*CREAR SPRINT*/
+/* CREAR SPRINT */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $sprint->setNombre($_POST['nombre']);
-    $sprint->setFechaInicio($_POST['fecha_inicio']);
-    $sprint->setFechaFin($_POST['fecha_fin']);
+    $nombre = $_POST['nombre'] ?? '';
+    $fecha_inicio = $_POST['fecha_inicio'] ?? '';
+    $fecha_fin = $_POST['fecha_fin'] ?? '';
 
-    $sprint->create();
+    if (
+        !empty($nombre) &&
+        !empty($fecha_inicio) &&
+        !empty($fecha_fin)
+    ) {
+
+        $sprint->setNombre($nombre);
+        $sprint->setFechaInicio($fecha_inicio);
+        $sprint->setFechaFin($fecha_fin);
+
+        $sprint->create();
+    }
 
     header("Location: /taller_base_datos_monolitico/public/index.php");
     exit();
 }
 
-/* ELIMINAR SPRINT*/
+/* ELIMINAR SPRINT */
 
-if (isset($_GET['action']) && $_GET['action'] === 'eliminar') {
+if (
+    isset($_GET['action']) &&
+    $_GET['action'] === 'eliminar'
+) {
 
     $id = $_GET['id'] ?? null;
 
-    if ($id) {
+    if ($id !== null) {
 
         $sprint->delete((int)$id);
-
-        header("Location: /taller_base_datos_monolitico/public/index.php");
-        exit();
     }
+
+    header("Location: /taller_base_datos_monolitico/public/index.php");
+    exit();
 }
